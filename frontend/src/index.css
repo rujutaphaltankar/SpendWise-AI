@@ -2,10 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
 html, body, #root {
   height: 100%;
 }
 
 body {
-  @apply bg-slate-50 text-ink-900 antialiased;
+  @apply bg-slate-50 text-ink-900 antialiased transition-colors duration-200;
+}
+
+html.dark body {
+  @apply bg-slate-950 text-slate-100;
+}
+
+html.dark .dark-card {
+  @apply border-slate-700 bg-slate-900 text-slate-100;
+}
+
+html.dark .dark-panel {
+  @apply border-slate-700 bg-slate-900/80 text-slate-100;
+}
+
+html.dark .dark-input {
+  @apply border-slate-700 bg-slate-900 text-slate-100 placeholder:text-slate-400;
+}
+
+html.dark .dark-muted {
+  @apply text-slate-300;
+}
+
+html.dark .dark-muted-strong {
+  @apply text-slate-200;
+}
+
+html.dark .dark-border {
+  @apply border-slate-700;
+}
+
+html.dark .dark-surface {
+  @apply bg-slate-900;
+}
+
+html.dark .dark-subtle {
+  @apply bg-slate-800;
+}
+
+html.dark .dark-brand-soft {
+  @apply bg-brand-500/10;
+}
+
+html.dark .dark-brand-text {
+  @apply text-brand-300;
+}
+
+html.dark .dark-cta {
+  @apply bg-slate-800 text-slate-100;
 }
