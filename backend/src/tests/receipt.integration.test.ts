@@ -53,7 +53,7 @@ describe("POST /api/receipts/process", () => {
   }, 60000);
 
   it("requires authentication", async () => {
-    const res = await request(app).post("/api/receipts/process").attach("receipt", SAMPLE_RECEIPT_PATH);
+    const res = await request(app).post("/api/receipts/process");
     expect(res.status).toBe(401);
   });
 

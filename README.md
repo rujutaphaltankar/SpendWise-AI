@@ -75,7 +75,7 @@ Backend layering: `routes -> controllers -> services -> models -> MongoDB`, with
 
 **14 - Testing + security:** 89 backend unit tests + 10 Python pytest tests, all passing (see below for how to run them). Passwords hashed, JWTs scoped correctly, every query scoped to the authenticated user, rate limiting on AI/OCR endpoints, file upload type/size validation, Helmet/CORS configured.
 
-**15 - Docker + deployment:** `docker-compose.yml` wires up MongoDB, the ML service, the backend, and the frontend together.
+**15 - Docker + deployment:** Docker Compose runs MongoDB, the ML service, the backend, and an Nginx frontend. Only the frontend port is published; MongoDB and internal services stay on the Compose network.
 
 ## Setup
 
@@ -83,7 +83,7 @@ Backend layering: `routes -> controllers -> services -> models -> MongoDB`, with
 - Node.js 20+
 - Python 3.12+ (for the ML service)
 - MongoDB running locally, or a MongoDB Atlas connection string
-- (Optional) Docker, if you'd rather use `docker-compose`
+- (Optional) Docker Compose, if you'd rather run the complete stack in containers
 
 ### 1. ML service
 
@@ -127,13 +127,17 @@ npm run dev
 
 Runs at `http://localhost:5173`.
 
-### 4. Or via Docker
+### 4. Run the complete stack with Docker Compose
 
 ```bash
-docker-compose up --build
+cp .env.example .env
+# Replace the example MongoDB password and both JWT secrets with unique random values.
+docker compose up --build -d
 ```
 
-This starts MongoDB, the ML service, the backend, and the frontend together.
+Open `http://localhost:8080` (or the configured `APP_PORT`). The frontend serves the app and proxies `/api` and `/uploads` to the backend on the private Compose network. MongoDB data and uploaded receipts use named volumes and survive container recreation.
+
+For public deployment, set `PUBLIC_APP_URL` to the final HTTPS origin and place the published frontend port behind a TLS reverse proxy. Generate secrets with a cryptographically secure generator, keep `.env` out of source control, and back up both named volumes. MongoDB credentials should use letters, numbers, underscores, or hyphens so they can be used safely in the internal connection URI. To update an existing deployment, run `docker compose up --build -d`.
 
 ## AI & OCR provider configuration
 
@@ -148,7 +152,7 @@ OCR_PROVIDER=google
 OCR_API_KEY=your-google-vision-key
 ```
 
-No code changes needed - every AI/OCR call goes through a clean service abstraction that dispatches based on these env vars, and falls back to the deterministic path if a configured provider ever returns something invalid.
+No code changes needed. Local services read these values from `backend/.env`; Docker Compose reads the provider values from the root `.env`. AI/OCR calls use the configured provider and retain the documented deterministic fallback behavior.
 
 ## Running tests
 

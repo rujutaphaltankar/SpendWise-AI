@@ -98,7 +98,7 @@ export function AddExpenseModal({
         {prefill?.receiptUrl && (
           <div className="mb-4 flex gap-3">
             <img
-              src={`${(import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api$/, "")}${prefill.receiptUrl}`}
+              src={`${import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api$/, "")}${prefill.receiptUrl}`}
               alt="Receipt"
               className="h-24 w-20 shrink-0 rounded-lg border border-slate-200 object-cover"
             />
