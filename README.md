@@ -77,6 +77,10 @@ Backend layering: `routes -> controllers -> services -> models -> MongoDB`, with
 
 **15 - Docker + deployment:** Docker Compose runs MongoDB, the ML service, the backend, and an Nginx frontend. Only the frontend port is published; MongoDB and internal services stay on the Compose network.
 
+## Live demo
+
+Production deployment: https://spend-wise-ai-tau.vercel.app/
+
 ## Setup
 
 ### Prerequisites
